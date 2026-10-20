@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UI 设计简报 · 效果 B 杂志门户</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Serif+SC:wght@700;900&display=swap">
+<style>
+/* Layout: logo + real tabs + search on top, a colored hero for the lead story, a 2-column card grid, detail opens as its own sub-page. */
+:root{
+  --bg:#f3f2ee; --panel:#ffffff; --ink:#15161a; --body:#3a3c42; --muted:#767982; --line:#e3e2dc;
+  --news:#1f5fd1; --knowledge:#7a3fd1; --skills:#d9780f; --showcase:#0f8f84;
+  --news-soft:#e4ecfb; --knowledge-soft:#ede4fb; --skills-soft:#fdeedb; --showcase-soft:#dcf3f0;
+  --shadow:0 10px 30px rgba(20,22,30,.08);
+  --serif:"Noto Serif SC","Songti SC",serif; --sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#121317;--panel:#1b1d22;--ink:#eeeee9;--body:#c9cad0;--muted:#8a8d96;--line:#2a2d34;--news:#7fa6f2;--knowledge:#b795f0;--skills:#f0a24c;--showcase:#5ec9bd;--news-soft:#1c2740;--knowledge-soft:#2a2040;--skills-soft:#3a2a14;--showcase-soft:#13302d;--shadow:0 10px 30px rgba(0,0,0,.35);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121317;--panel:#1b1d22;--ink:#eeeee9;--body:#c9cad0;--muted:#8a8d96;--line:#2a2d34;--news:#7fa6f2;--knowledge:#b795f0;--skills:#f0a24c;--showcase:#5ec9bd;--news-soft:#1c2740;--knowledge-soft:#2a2040;--skills-soft:#3a2a14;--showcase-soft:#13302d;--shadow:0 10px 30px rgba(0,0,0,.35);color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:4px}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+.wrap{max-width:1160px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--bg);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.top-in{display:flex;align-items:center;gap:22px;min-height:62px;flex-wrap:wrap;padding-block:8px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:17px;letter-spacing:.3px;white-space:nowrap}
+.logo svg{width:30px;height:30px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tab{padding:6px 12px;border-radius:999px;font-size:14px;color:var(--muted);font-weight:500}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);background:var(--panel);box-shadow:inset 0 0 0 1px var(--line)}
+.tab i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:1px;background:var(--c)}
+.search{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px 12px;min-width:200px;flex:0 1 260px}
+.search input{border:0;background:none;font:inherit;font-size:14px;color:var(--ink);width:100%;min-width:0;outline:none}
+.search input::placeholder{color:var(--muted)}
+.hist-link{font-size:14px;color:var(--muted);white-space:nowrap}
+.hist-link:hover{color:var(--ink)}
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:0;margin-top:22px;border-radius:18px;overflow:hidden;background:var(--panel);box-shadow:var(--shadow)}
+.hero-art{position:relative;min-height:300px;background:var(--news-soft)}
+.hero-art canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero-art .date{position:absolute;left:22px;top:18px;font-size:12px;letter-spacing:2px;font-weight:700;color:var(--ink);opacity:.75}
+.hero-text{padding:34px 36px;display:flex;flex-direction:column;gap:14px;justify-content:center;min-width:0}
+.kicker{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:1.5px;color:var(--c)}
+.kicker::before{content:"";width:18px;height:3px;background:var(--c);border-radius:2px}
+.hero h1{margin:0;font-family:var(--serif);font-size:32px;line-height:1.35;font-weight:900;text-wrap:balance}
+.hero p{margin:0;color:var(--body);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.btn{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;background:var(--ink);color:var(--bg);font-weight:700;font-size:14px}
+.btn:hover{opacity:.88}
+/* grid */
+.sect-head{display:flex;align-items:baseline;justify-content:space-between;margin:34px 0 14px}
+.sect-head h2{margin:0;font-size:14px;font-weight:700;letter-spacing:1.5px;color:var(--muted)}
+.sect-head span{font-size:12px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.card{position:relative;background:var(--panel);border-radius:14px;padding:22px 24px 20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;min-width:0;text-align:left;transition:transform .15s ease}
+.card:hover{transform:translateY(-2px)}
+.card::before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:4px;border-radius:0 4px 4px 0;background:var(--c)}
+.card .k{font-size:12px;font-weight:700;letter-spacing:1.5px;color:var(--c)}
+.card h3{margin:0;font-family:var(--serif);font-size:21px;line-height:1.4;font-weight:700;text-wrap:balance}
+.card p{margin:0;font-size:14px;color:var(--body);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card .meta{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:auto;padding-top:8px;font-size:12px;color:var(--muted)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:12px;padding:2px 9px;border-radius:999px;background:var(--soft,var(--line));color:var(--ink)}
+.empty{grid-column:1/-1;padding-block:50px;text-align:center;color:var(--muted)}
+/* detail sub-page */
+.detail{margin-top:22px}
+.back{display:inline-flex;gap:8px;align-items:center;font-size:14px;color:var(--muted);margin-bottom:16px}
+.back:hover{color:var(--ink)}
+.dhead{border-radius:18px;padding:40px 44px;background:var(--soft);display:flex;flex-direction:column;gap:14px}
+.dhead h1{margin:0;font-family:var(--serif);font-size:34px;line-height:1.35;font-weight:900;text-wrap:balance;max-width:24ch}
+.dhead .meta{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--body)}
+.dhead .meta a{color:var(--ink);font-weight:700}
+.dbody{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:28px;margin-top:22px}
+.dcol{background:var(--panel);border-radius:14px;padding:28px 30px;box-shadow:var(--shadow);min-width:0}
+.dcol h4{margin:0 0 10px;font-size:12px;font-weight:700;letter-spacing:1.5px;color:var(--muted)}
+.dcol p{margin:0;line-height:1.85;color:var(--body);max-width:62ch}
+.ai{display:grid;gap:18px}
+.ai .blk{border-left:3px solid var(--c);padding-left:14px}
+.ai .blk b{display:block;font-size:12px;letter-spacing:1.5px;color:var(--c);margin-bottom:4px}
+.ai .note{font-size:11px;color:var(--muted)}
+.rel{margin-top:34px}
+/* history */
+.hist{margin-top:26px}
+.hist h1{font-family:var(--serif);font-size:28px;font-weight:900;margin:0 0 4px}
+.hist .sub{color:var(--muted);font-size:13px;margin:0 0 18px}
+.hrow{display:grid;grid-template-columns:130px minmax(0,1fr) 24px;gap:18px;padding:18px 22px;background:var(--panel);border-radius:12px;box-shadow:var(--shadow);align-items:center;margin-bottom:10px}
+.hrow time{font-weight:700;font-variant-numeric:tabular-nums}
+.hrow .t{font-size:14px;color:var(--body);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.hrow .m{font-size:12px;color:var(--muted);margin-top:2px}
+.foot{display:flex;justify-content:space-between;gap:16px;padding-block:36px 28px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.switch{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));font-size:12px;padding:8px 12px;border-radius:999px;background:var(--ink);color:var(--bg);box-shadow:0 4px 14px rgba(0,0,0,.18);z-index:20}
+@media (max-width:860px){
+  .hero{grid-template-columns:1fr}
+  .hero-art{min-height:190px}
+  .hero-text{padding:24px 22px}
+  .hero h1{font-size:25px}
+  .grid{grid-template-columns:1fr}
+  .dbody{grid-template-columns:1fr}
+  .dhead{padding:28px 22px}
+  .dhead h1{font-size:26px}
+  .hrow{grid-template-columns:1fr;gap:4px}
+  .hrow .arrow{display:none}
+  .search{flex-basis:100%;margin-left:0;order:9}
+}
+@media (prefers-reduced-motion:reduce){.card{transition:none}}
+</style>
+</head>
+<body>
+
+
+<header class="top"><div class="wrap top-in" id="topbar"></div></header>
+<main class="wrap" id="app"></main>
+<a class="switch" id="switch" href="a.html">← 看效果 A 纯素清单</a>
+
+<script>
+const DATA = [{"date":"2026-10-13","articles":[{"section":"news","title":"组件更新，先看清改动再决定是否同步","summary":"某设计工具在组件库更新中加入差异预览与影响范围提示：设计师可以先查看属性、样式和嵌套组件的变化，再选择需要同步的部分。更新入口同时列出可能受影响的页面，帮助团队在应用改动前完成检查。该功能仍处于试用阶段，复杂组件的兼容情况有待验证。","tags":["设计工具","组件库","团队协作"],"impact":"组件维护更容易定位变化，但团队仍需确认修改是否符合现有页面的使用场景。","advice":"先用一组常用组件试跑更新流程，核对交互状态与布局，再逐步同步到正式文件。","source":"排版样例","source_url":null,"article_date":null},{"section":"knowledge","title":"信息层级，应该从用户的任务开始","summary":"这篇示例文章以预约页面为例，讨论信息层级如何回应用户当下的问题：先判断服务是否适合自己，再确认时间、地点和费用，最后完成预约。它将字号、位置与留白视为表达优先级的手段，并提醒设计师不要把每条信息都处理成同样醒目的模块。","tags":["信息层级","用户体验","任务流程"],"impact":"页面的重点取决于用户要完成什么。统一放大所有内容，可能削弱真正重要的操作。","advice":"列出用户进入页面后的三个关键问题，检查首屏能否依次回答，再调整字号和留白。","source":"排版样例","source_url":null,"article_date":null},{"section":"skills","title":"用一张状态清单，补齐表单设计","summary":"这份示例教程将表单拆成默认、输入中、校验失败、提交中与提交成功五种状态，并逐一检查提示文案、焦点位置和按钮反馈。案例保留用户已经填写的内容，在发生错误的位置说明修改方式，让设计交付同时覆盖正常路径与常见异常情况。","tags":["表单设计","交互状态","设计交付"],"impact":"状态覆盖是否完整，会影响异常时的使用体验，也会影响设计与开发之间的沟通成本。","advice":"选一个正在做的表单，对照清单补齐状态，并用具体输入内容检查提示是否足够明确。","source":"排版样例","source_url":null,"article_date":null},{"section":"showcase","title":"一个预约流程，如何把三步操作组织清楚","summary":"这个虚构案例将预约过程组织为选择服务、选择时间与确认信息三步，保留进度提示，并在确认页集中展示费用和修改入口。页面使用同一套文字层级与按钮位置，减少切换步骤时的重新寻找。这里展示的是设计思路，尚无实际用户测试结果。","tags":["流程设计","信息呈现","案例拆解"],"impact":"稳定的操作位置与清晰的确认信息，有助于用户理解流程；实际效果仍需测试验证。","advice":"借鉴它的任务顺序和修改路径，再根据自己产品的信息量决定是否需要拆分步骤。","source":"排版样例","source_url":null,"article_date":null}]},{"date":"2026-10-12","articles":[{"section":"news","title":"把更新说明，放在用户需要它的地方","summary":"这是一则虚构的界面更新样例：产品在原有操作旁增加简短的新功能说明，让用户在实际任务中了解变化。说明可以关闭，再次需要时仍能从帮助入口找到。相比一次性展示所有更新，案例强调提示出现的时机与当前任务的关联。","impact":"及时说明变化可以减少重新学习的负担，但过多提示也会打断操作。","advice":"先选一个变化较大的操作，检查提示是否简短、可关闭，并提供再次查看的入口。","tags":["更新提示","产品体验"],"source":"排版样例","source_url":null,"article_date":null},{"section":"knowledge","title":"错误提示，需要告诉用户下一步","summary":"这篇排版样例讨论错误提示的三个要素：发生了什么、已经完成的操作是否保留，以及接下来可以怎么做。它以网络中断为例，比较只有错误代码的提示与提供重试入口的提示，帮助设计师从信息表达转向问题解决。","impact":"错误状态也是完整体验的一部分，恢复路径会影响用户能否继续完成任务。","advice":"找出流程中最常见的一种错误，用真实情境检查说明和恢复入口是否足够清楚。","tags":["错误状态","文案设计"],"source":"排版样例","source_url":null,"article_date":null},{"section":"skills","title":"交付前，检查键盘能否走完整个流程","summary":"这份虚构练习从进入表单开始，依次检查焦点顺序、按钮触发、弹窗关闭与焦点返回。操作过程中只使用键盘，并记录无法到达或无法看清焦点的位置。检查结果整理成具体页面与操作步骤，方便设计和开发共同修改。","impact":"键盘路径有助于发现被鼠标操作掩盖的交互问题。","advice":"从一个短流程开始，记录焦点顺序，确保当前操作位置清晰可见。","tags":["可访问性","交互检查"],"source":"排版样例","source_url":null,"article_date":null},{"section":"showcase","title":"让长表单的填写进度变得可预期","summary":"这个虚构案例将资料填写组织为基础信息、详细资料与最终确认三个阶段。界面说明每一阶段需要准备的内容，保留已经填写的信息，并允许返回修改。案例用于展示任务分组思路，没有实际完成率或用户测试数据。","impact":"清晰的步骤说明可以帮助用户评估投入，是否分步仍需结合任务复杂度判断。","advice":"先按用户理解的信息类别分组，再测试是否确实需要拆成多个页面。","tags":["表单流程","案例拆解"],"source":"排版样例","source_url":null,"article_date":null}]},{"date":"2026-09-30","articles":[{"section":"knowledge","title":"留白也在帮助读者理解内容关系","summary":"这篇虚构样例通过一个资讯页面讨论留白：关联内容之间保持较近距离，不同主题之间留出更明显的空间。示例比较标题、摘要、来源三层信息的间距，说明页面无需为每组信息增加边框，也能建立清楚的阅读顺序。","impact":"稳定的间距关系有助于分组，装饰性分隔线可以相应减少。","advice":"选择一个内容密集的页面，先调整组内和组间距离，再检查是否仍需要分隔线。","tags":["信息分组","视觉层级"],"source":"排版样例","source_url":null,"article_date":null},{"section":"skills","title":"用真实的长标题检查卡片布局","summary":"这份排版练习为同一张内容卡片准备短标题、长标题、多行摘要与缺少标签四种情况，观察组件能否自然伸展。它提醒设计师使用接近真实内容的数据检查布局，避免只在理想字数下成立的固定高度设计。","impact":"内容长度变化会暴露布局限制，提前检查能够减少上线后的截断和挤压。","advice":"为常用卡片准备几组极端但合理的文字，分别检查桌面和手机宽度。","tags":["响应式","组件检查"],"source":"排版样例","source_url":null,"article_date":null}]}];
+const SECTIONS = {news:"近日新闻",knowledge:"行业知识",skills:"实用技能",showcase:"作品赏析"};
+const ORDER = ["news","knowledge","skills","showcase"];
+const dot = d => d.replaceAll("-",".");
+const esc = s => String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const state = {issue:0, tab:"all", q:"", view:"home", art:null};
+const topbar=document.getElementById("topbar"), app=document.getElementById("app");
+const LOGO = `<svg viewBox="0 0 30 30" aria-hidden="true"><rect x="2" y="2" width="26" height="26" rx="7" fill="var(--ink)"/><rect x="8" y="8" width="6" height="14" rx="2" fill="var(--bg)"/><rect x="16" y="8" width="6" height="8" rx="2" fill="var(--news)"/><rect x="16" y="18" width="6" height="4" rx="2" fill="var(--bg)"/></svg>`;
+
+function renderTop(){
+  topbar.innerHTML = `
+    <a class="logo" href="#" id="home">${LOGO}UI 设计简报</a>
+    <nav class="tabs" role="tablist" aria-label="栏目">
+      <button class="tab" role="tab" data-tab="all" aria-selected="${state.tab==="all"}">全部</button>
+      ${ORDER.map(s=>`<button class="tab" role="tab" data-tab="${s}" aria-selected="${state.tab===s}" style="--c:var(--${s})"><i></i>${SECTIONS[s]}</button>`).join("")}
+    </nav>
+    <form class="search" role="search"><span aria-hidden="true">⌕</span><input id="q" type="search" placeholder="搜标题、标签、关键词" value="${esc(state.q)}" aria-label="搜索"></form>
+    <a class="hist-link" href="#" id="hist">历史 ${DATA.length} 期</a>`;
+  topbar.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{state.tab=b.dataset.tab;state.view="home";state.q="";render()});
+  topbar.querySelector("form").onsubmit=e=>e.preventDefault();
+  const q=topbar.querySelector("#q"); q.oninput=()=>{state.q=q.value.trim();state.view="home";renderMain(); };
+  topbar.querySelector("#home").onclick=e=>{e.preventDefault();state.view="home";state.tab="all";state.q="";render()};
+  topbar.querySelector("#hist").onclick=e=>{e.preventDefault();state.view="history";render();window.scrollTo(0,0)};
+}
+function allArticles(){ return DATA[state.issue].articles.map((a,i)=>({...a,i})).sort((a,b)=>ORDER.indexOf(a.section)-ORDER.indexOf(b.section)); }
+function hits(){
+  let list=allArticles();
+  if(state.tab!=="all") list=list.filter(a=>a.section===state.tab);
+  if(state.q){const q=state.q.toLowerCase(); list=list.filter(a=>[a.title,a.summary,a.impact,a.advice,...a.tags].join(" ").toLowerCase().includes(q));}
+  return list;
+}
+function card(a){
+  return `<button class="card" data-art="${a.i}" style="--c:var(--${a.section});--soft:var(--${a.section}-soft)">
+    <span class="k">${SECTIONS[a.section]}</span>
+    <h3>${esc(a.title)}</h3>
+    <p>${esc(a.summary)}</p>
+    <div class="chips">${a.tags.map(t=>`<span class="chip">${esc(t)}</span>`).join("")}</div>
+    <div class="meta"><span>来源 · ${esc(a.source)}</span><span>阅读分析 →</span></div>
+  </button>`;
+}
+function renderMain(){
+  const issue=DATA[state.issue];
+  if(state.view==="history") return renderHistory();
+  if(state.view==="article") return renderArticle();
+  const list=hits();
+  const lead=(state.tab==="all"&&!state.q)?list[0]:null;
+  const rest=lead?list.slice(1):list;
+  app.innerHTML = `
+    ${lead?`<section class="hero" style="--c:var(--${lead.section});--soft:var(--${lead.section}-soft)">
+      <div class="hero-art" style="background:var(--soft)"><canvas id="art"></canvas><span class="date">${dot(issue.date)} · ${state.issue===0?"今日":"往期"}</span></div>
+      <div class="hero-text"><span class="kicker">今日头条 · ${SECTIONS[lead.section]}</span><h1>${esc(lead.title)}</h1><p>${esc(lead.summary)}</p><button class="btn" data-art="${lead.i}">阅读 AI 分析 →</button></div>
+    </section>`:""}
+    <div class="sect-head"><h2>${state.q?`搜索「${esc(state.q)}」`:state.tab==="all"?"今日其余内容":SECTIONS[state.tab]}</h2><span>${dot(issue.date)} · ${list.length} 篇</span></div>
+    <div class="grid">${rest.length?rest.map(card).join(""):`<div class="empty">${state.q?"没有匹配的内容，换个词试试":"本期该栏目暂无内容"}</div>`}</div>
+    <footer class="foot"><p>AI 分析与建议属于推论，请结合原文与实际项目判断。</p><span>${state.issue<DATA.length-1?`<a href="#" id="older">上一期 ${dot(DATA[state.issue+1].date)} ←</a>`:""} ${state.issue>0?` <a href="#" id="newer">→ 下一期 ${dot(DATA[state.issue-1].date)}</a>`:""}</span></footer>`;
+  app.querySelectorAll("[data-art]").forEach(el=>el.onclick=()=>{state.art=+el.dataset.art;state.view="article";render();window.scrollTo(0,0)});
+  const older=app.querySelector("#older"), newer=app.querySelector("#newer");
+  if(older) older.onclick=e=>{e.preventDefault();state.issue++;render()};
+  if(newer) newer.onclick=e=>{e.preventDefault();state.issue--;render()};
+  if(lead) drawArt(document.getElementById("art"), lead.section, issue.date);
+}
+function renderArticle(){
+  const a=DATA[state.issue].articles[state.art];
+  const others=allArticles().filter(x=>x.i!==state.art);
+  const url=a.source_url;
+  app.innerHTML=`<section class="detail" style="--c:var(--${a.section});--soft:var(--${a.section}-soft)">
+    <a class="back" href="#" id="back">← 返回今日简报</a>
+    <div class="dhead"><span class="kicker">${SECTIONS[a.section]} · ${dot(DATA[state.issue].date)}</span><h1>${esc(a.title)}</h1>
+      <div class="meta"><span>来源 · ${url?`<a href="${esc(url)}" target="_blank" rel="noopener">${esc(a.source)} ↗</a>`:esc(a.source)}</span>${a.article_date?`<span>发布 ${dot(a.article_date)}</span>`:""}<span class="chips">${a.tags.map(t=>`<span class="chip" style="background:var(--panel)">${esc(t)}</span>`).join("")}</span></div></div>
+    <div class="dbody">
+      <div class="dcol"><h4>内容摘要</h4><p>${esc(a.summary)}</p></div>
+      <div class="dcol ai"><h4>AI 设计价值</h4>
+        <div class="blk"><b>影响</b>${esc(a.impact)}</div>
+        <div class="blk"><b>建议</b>${esc(a.advice)}</div>
+        <div class="note">推论，非原文结论</div></div>
+    </div>
+    <div class="rel"><div class="sect-head"><h2>同期其他内容</h2></div><div class="grid">${others.map(card).join("")}</div></div>
+  </section>`;
+  app.querySelector("#back").onclick=e=>{e.preventDefault();state.view="home";render();window.scrollTo(0,0)};
+  app.querySelectorAll("[data-art]").forEach(el=>el.onclick=()=>{state.art=+el.dataset.art;render();window.scrollTo(0,0)});
+}
+function renderHistory(){
+  app.innerHTML=`<section class="hist"><h1>历史简报</h1><p class="sub">按日期回看每期精选 · 已归档 ${DATA.length} 期</p>
+    ${DATA.map((iss,i)=>`<a class="hrow" href="#" data-issue="${i}"><time>${dot(iss.date)}${i===0?" · 最新":""}</time><div><div class="t">${iss.articles.map(a=>esc(a.title)).join(" / ")}</div><div class="m">${iss.articles.length} 篇 · ${[...new Set(iss.articles.map(a=>SECTIONS[a.section]))].join(" · ")}</div></div><span class="arrow">→</span></a>`).join("")}
+  </section>`;
+  app.querySelectorAll("[data-issue]").forEach(el=>el.onclick=e=>{e.preventDefault();state.issue=+el.dataset.issue;state.view="home";state.tab="all";render();window.scrollTo(0,0)});
+}
+function drawArt(cv, section, seedStr){
+  if(!cv) return;
+  const dpr=Math.min(2,window.devicePixelRatio||1), W=cv.clientWidth, H=cv.clientHeight;
+  cv.width=W*dpr; cv.height=H*dpr; const g=cv.getContext("2d"); g.scale(dpr,dpr);
+  const cs=getComputedStyle(document.documentElement);
+  const hue=cs.getPropertyValue("--"+section).trim(), ink=cs.getPropertyValue("--ink").trim();
+  let s=[...seedStr].reduce((a,c)=>a*31+c.charCodeAt(0)>>>0,7); const rnd=()=>(s=(s*1664525+1013904223)>>>0)/4294967296;
+  // soft grid like a design canvas
+  g.strokeStyle=ink; g.globalAlpha=.07; g.lineWidth=1;
+  for(let x=0;x<W;x+=28){g.beginPath();g.moveTo(x,0);g.lineTo(x,H);g.stroke()}
+  for(let y=0;y<H;y+=28){g.beginPath();g.moveTo(0,y);g.lineTo(W,y);g.stroke()}
+  // overlapping UI-like blocks
+  for(let i=0;i<7;i++){
+    const w=60+rnd()*W*.45, h=40+rnd()*H*.5, x=rnd()*(W-w), y=rnd()*(H-h), r=8+rnd()*18;
+    g.globalAlpha=.10+rnd()*.22; g.fillStyle=hue;
+    g.beginPath(); g.roundRect(x,y,w,h,r); g.fill();
+  }
+  // one crisp "component" outline
+  g.globalAlpha=.9; g.strokeStyle=ink; g.lineWidth=1.5;
+  const bw=Math.min(220,W*.5), bh=120, bx=W*.5-bw/2+ (rnd()-.5)*40, by=H*.5-bh/2+(rnd()-.5)*30;
+  g.beginPath(); g.roundRect(bx,by,bw,bh,10); g.stroke();
+  g.globalAlpha=.9; g.fillStyle=ink;
+  g.beginPath(); g.roundRect(bx+16,by+18,bw*.5,10,5); g.fill();
+  g.globalAlpha=.35; g.beginPath(); g.roundRect(bx+16,by+40,bw*.7,8,4); g.fill(); g.beginPath(); g.roundRect(bx+16,by+56,bw*.55,8,4); g.fill();
+  g.globalAlpha=1; g.fillStyle=hue; g.beginPath(); g.roundRect(bx+16,by+bh-36,74,22,11); g.fill();
+}
+function render(){renderTop();renderMain();}
+render();
+window.addEventListener("resize",()=>{const c=document.getElementById("art"); if(c&&state.view==="home") drawArt(c, hits()[0].section, DATA[state.issue].date);});
+</script>
+
+</body>
+</html>
