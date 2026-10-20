@@ -20,7 +20,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
 a{color:inherit;text-decoration:none}
 a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
-.wrap{max-width:1120px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1180px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 /* masthead */
 .mast{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding-block:22px 14px;border-bottom:1px solid var(--ink);flex-wrap:wrap}
 .brand{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
@@ -38,24 +38,54 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;paddin
 .chips{display:flex;gap:6px;flex-wrap:wrap}
 .chip{font-size:12px;padding:2px 9px;border-radius:999px;background:var(--tag);color:var(--body)}
 .chip[aria-pressed="true"]{background:var(--accent);color:#fff}
+/* layout */
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:48px;align-items:start}
+.side{position:sticky;top:16px;display:grid;gap:26px;font-size:13px}
+.side h3{margin:0 0 8px;font-size:11px;letter-spacing:1.5px;color:var(--muted);font-weight:700;text-transform:uppercase}
+.note{font-family:var(--serif);font-size:14.5px;line-height:1.8;color:var(--body);border-left:2px solid var(--accent);padding-left:12px}
+.toc{display:grid;gap:6px}
+.toc a{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line);color:var(--body)}
+.toc a:hover{color:var(--accent)}
+.toc b{font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums}
+.past{display:grid;gap:8px}
+.past a{display:grid;gap:2px;color:var(--body)}
+.past time{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.past span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.5}
+.past a:hover span{color:var(--accent)}
+.stat{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat div{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:10px 12px}
+.stat b{display:block;font-size:20px;font-weight:600;line-height:1.2;font-variant-numeric:tabular-nums}
+.stat small{color:var(--muted);font-size:11px}
+.group{padding-top:26px}
+.group:first-child{padding-top:8px}
+.ghead{display:flex;align-items:baseline;gap:12px;padding-bottom:6px;border-bottom:2px solid var(--ink)}
+.ghead h2{margin:0;font-size:15px;font-weight:700;letter-spacing:.5px}
+.ghead span{font-size:12px;color:var(--muted)}
 /* list */
 .list{list-style:none;margin:0;padding:0}
 .item{border-bottom:1px solid var(--line)}
-.row{display:grid;grid-template-columns:84px minmax(0,1fr) 150px;gap:18px;align-items:baseline;padding-block:16px}
-.sec{font-size:12px;color:var(--accent);font-weight:500;letter-spacing:.5px;white-space:nowrap}
+.row{display:grid;grid-template-columns:28px minmax(0,1fr) 120px;gap:16px;align-items:baseline;padding-block:18px}
+.sec{font-family:var(--serif);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
 .main{min-width:0}
 .title{margin:0;font-size:18px;font-weight:600;line-height:1.45;text-wrap:balance}
 .title button{text-align:left;line-height:inherit}
 .title button:hover{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
-.lede{margin:4px 0 0;color:var(--body);font-size:14px;line-height:1.6;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.lede{margin:6px 0 0;color:var(--body);font-size:14px;line-height:1.7;max-width:70ch;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .item[open] .lede{display:none}
+.imp{margin:8px 0 0;font-size:13.5px;line-height:1.6;color:var(--ink);max-width:70ch}
+.imp b{font-weight:700;color:var(--accent);margin-right:6px}
+.item[open] .imp{display:none}
+.rowtags{display:flex;gap:6px 12px;flex-wrap:wrap;margin-top:8px;font-size:12px;color:var(--muted)}
+.rowtags button{color:var(--muted)}
+.rowtags button::before{content:"#";opacity:.6;margin-right:1px}
+.rowtags button:hover{color:var(--accent)}
 .aside{display:flex;flex-direction:column;align-items:flex-end;gap:4px;font-size:12px;color:var(--muted);white-space:nowrap}
 .aside a{color:var(--ink)}
 .aside a:hover{color:var(--accent)}
 .toggle{color:var(--muted)}
 .toggle::after{content:"展开 ↓"}
 .item[open] .toggle::after{content:"收起 ↑"}
-.detail{display:none;grid-template-columns:84px minmax(0,1fr);gap:18px;padding-bottom:22px}
+.detail{display:none;grid-template-columns:28px minmax(0,1fr);gap:16px;padding-bottom:22px}
 .item[open] .detail{display:grid}
 .detail .body{grid-column:2;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:28px}
 .detail p{margin:0}
@@ -67,6 +97,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;paddin
 .ai .note{margin-top:10px;font-size:11px;color:var(--muted)}
 .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
 .tags .chip{cursor:pointer}
+.about{margin-top:36px;padding-top:22px;border-top:1px solid var(--ink);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;font-size:13px;color:var(--body)}
+.about h4{margin:0 0 6px;font-size:11px;letter-spacing:1.5px;color:var(--muted);font-weight:700}
+.about p{margin:0;line-height:1.7}
 .foot{display:flex;justify-content:space-between;gap:16px;padding-block:18px 28px;font-size:12px;color:var(--muted);flex-wrap:wrap}
 .foot a{color:var(--ink)}
 .empty{padding-block:40px;color:var(--muted);text-align:center}
@@ -81,7 +114,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;paddin
 .hrow .arrow{color:var(--muted)}
 .hrow:hover .arrow{color:var(--accent)}
 .switch{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));font-size:12px;padding:8px 12px;border-radius:999px;background:var(--ink);color:var(--bg);box-shadow:0 4px 14px rgba(0,0,0,.18)}
-@media (max-width:760px){
+@media (max-width:980px){.cols{grid-template-columns:1fr}.side{position:static;grid-template-columns:1fr 1fr}.about{grid-template-columns:1fr}}
+@media (max-width:760px){.side{grid-template-columns:1fr}
   .row{grid-template-columns:1fr;gap:6px;padding-block:14px}
   .aside{flex-direction:row;align-items:baseline;gap:14px;justify-content:space-between;white-space:normal}
   .detail{grid-template-columns:1fr}
@@ -104,6 +138,12 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;paddin
 const DATA = [{"date":"2026-10-13","articles":[{"section":"news","title":"组件更新，先看清改动再决定是否同步","summary":"某设计工具在组件库更新中加入差异预览与影响范围提示：设计师可以先查看属性、样式和嵌套组件的变化，再选择需要同步的部分。更新入口同时列出可能受影响的页面，帮助团队在应用改动前完成检查。该功能仍处于试用阶段，复杂组件的兼容情况有待验证。","tags":["设计工具","组件库","团队协作"],"impact":"组件维护更容易定位变化，但团队仍需确认修改是否符合现有页面的使用场景。","advice":"先用一组常用组件试跑更新流程，核对交互状态与布局，再逐步同步到正式文件。","source":"排版样例","source_url":null,"article_date":null},{"section":"knowledge","title":"信息层级，应该从用户的任务开始","summary":"这篇示例文章以预约页面为例，讨论信息层级如何回应用户当下的问题：先判断服务是否适合自己，再确认时间、地点和费用，最后完成预约。它将字号、位置与留白视为表达优先级的手段，并提醒设计师不要把每条信息都处理成同样醒目的模块。","tags":["信息层级","用户体验","任务流程"],"impact":"页面的重点取决于用户要完成什么。统一放大所有内容，可能削弱真正重要的操作。","advice":"列出用户进入页面后的三个关键问题，检查首屏能否依次回答，再调整字号和留白。","source":"排版样例","source_url":null,"article_date":null},{"section":"skills","title":"用一张状态清单，补齐表单设计","summary":"这份示例教程将表单拆成默认、输入中、校验失败、提交中与提交成功五种状态，并逐一检查提示文案、焦点位置和按钮反馈。案例保留用户已经填写的内容，在发生错误的位置说明修改方式，让设计交付同时覆盖正常路径与常见异常情况。","tags":["表单设计","交互状态","设计交付"],"impact":"状态覆盖是否完整，会影响异常时的使用体验，也会影响设计与开发之间的沟通成本。","advice":"选一个正在做的表单，对照清单补齐状态，并用具体输入内容检查提示是否足够明确。","source":"排版样例","source_url":null,"article_date":null},{"section":"showcase","title":"一个预约流程，如何把三步操作组织清楚","summary":"这个虚构案例将预约过程组织为选择服务、选择时间与确认信息三步，保留进度提示，并在确认页集中展示费用和修改入口。页面使用同一套文字层级与按钮位置，减少切换步骤时的重新寻找。这里展示的是设计思路，尚无实际用户测试结果。","tags":["流程设计","信息呈现","案例拆解"],"impact":"稳定的操作位置与清晰的确认信息，有助于用户理解流程；实际效果仍需测试验证。","advice":"借鉴它的任务顺序和修改路径，再根据自己产品的信息量决定是否需要拆分步骤。","source":"排版样例","source_url":null,"article_date":null}]},{"date":"2026-10-12","articles":[{"section":"news","title":"把更新说明，放在用户需要它的地方","summary":"这是一则虚构的界面更新样例：产品在原有操作旁增加简短的新功能说明，让用户在实际任务中了解变化。说明可以关闭，再次需要时仍能从帮助入口找到。相比一次性展示所有更新，案例强调提示出现的时机与当前任务的关联。","impact":"及时说明变化可以减少重新学习的负担，但过多提示也会打断操作。","advice":"先选一个变化较大的操作，检查提示是否简短、可关闭，并提供再次查看的入口。","tags":["更新提示","产品体验"],"source":"排版样例","source_url":null,"article_date":null},{"section":"knowledge","title":"错误提示，需要告诉用户下一步","summary":"这篇排版样例讨论错误提示的三个要素：发生了什么、已经完成的操作是否保留，以及接下来可以怎么做。它以网络中断为例，比较只有错误代码的提示与提供重试入口的提示，帮助设计师从信息表达转向问题解决。","impact":"错误状态也是完整体验的一部分，恢复路径会影响用户能否继续完成任务。","advice":"找出流程中最常见的一种错误，用真实情境检查说明和恢复入口是否足够清楚。","tags":["错误状态","文案设计"],"source":"排版样例","source_url":null,"article_date":null},{"section":"skills","title":"交付前，检查键盘能否走完整个流程","summary":"这份虚构练习从进入表单开始，依次检查焦点顺序、按钮触发、弹窗关闭与焦点返回。操作过程中只使用键盘，并记录无法到达或无法看清焦点的位置。检查结果整理成具体页面与操作步骤，方便设计和开发共同修改。","impact":"键盘路径有助于发现被鼠标操作掩盖的交互问题。","advice":"从一个短流程开始，记录焦点顺序，确保当前操作位置清晰可见。","tags":["可访问性","交互检查"],"source":"排版样例","source_url":null,"article_date":null},{"section":"showcase","title":"让长表单的填写进度变得可预期","summary":"这个虚构案例将资料填写组织为基础信息、详细资料与最终确认三个阶段。界面说明每一阶段需要准备的内容，保留已经填写的信息，并允许返回修改。案例用于展示任务分组思路，没有实际完成率或用户测试数据。","impact":"清晰的步骤说明可以帮助用户评估投入，是否分步仍需结合任务复杂度判断。","advice":"先按用户理解的信息类别分组，再测试是否确实需要拆成多个页面。","tags":["表单流程","案例拆解"],"source":"排版样例","source_url":null,"article_date":null}]},{"date":"2026-09-30","articles":[{"section":"knowledge","title":"留白也在帮助读者理解内容关系","summary":"这篇虚构样例通过一个资讯页面讨论留白：关联内容之间保持较近距离，不同主题之间留出更明显的空间。示例比较标题、摘要、来源三层信息的间距，说明页面无需为每组信息增加边框，也能建立清楚的阅读顺序。","impact":"稳定的间距关系有助于分组，装饰性分隔线可以相应减少。","advice":"选择一个内容密集的页面，先调整组内和组间距离，再检查是否仍需要分隔线。","tags":["信息分组","视觉层级"],"source":"排版样例","source_url":null,"article_date":null},{"section":"skills","title":"用真实的长标题检查卡片布局","summary":"这份排版练习为同一张内容卡片准备短标题、长标题、多行摘要与缺少标签四种情况，观察组件能否自然伸展。它提醒设计师使用接近真实内容的数据检查布局，避免只在理想字数下成立的固定高度设计。","impact":"内容长度变化会暴露布局限制，提前检查能够减少上线后的截断和挤压。","advice":"为常用卡片准备几组极端但合理的文字，分别检查桌面和手机宽度。","tags":["响应式","组件检查"],"source":"排版样例","source_url":null,"article_date":null}]}];
 const SECTIONS = {news:"近日新闻",knowledge:"行业知识",skills:"实用技能",showcase:"作品赏析"};
 const ORDER = ["news","knowledge","skills","showcase"];
+const NOTES = {
+  "2026-10-13":"今天四条都在说同一件事:动手之前先看清范围。组件库更新要先看差异,信息层级要先问用户的任务,表单要先列状态,预约流程要先定步骤。",
+  "2026-10-12":"这期偏“说明”:更新提示放在哪、错误提示说什么、键盘能不能走通,都是把变化讲清楚的功夫。案例是长表单的进度分组。",
+  "2026-09-30":"两条短的:留白怎么帮读者分组,以及用真实长标题去撞一撞卡片布局。"
+};
+const ABOUT = [["这是什么","每个工作日一期,挑四类内容:近日新闻、行业知识、实用技能、作品赏析。每条给摘要,再给一句“影响”和一句“建议”。"],["怎么用","先扫标题和影响,30 秒知道今天有没有值得点开的。点标题展开全文,点标签只看这一类,左右箭头翻期。"],["关于 AI 分析","影响和建议由 AI 根据原文推论,不是原文观点。拿不准的地方请回到原文,并结合自己的项目判断。"]];
 const dot = d => d.replaceAll("-",".");
 const esc = s => String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 let issueIdx = 0, tagFilter = null, view = "issue", openAll = false;
@@ -115,6 +155,9 @@ function render(){
   const arts = issue.articles.slice().sort((a,b)=>ORDER.indexOf(a.section)-ORDER.indexOf(b.section));
   const shown = tagFilter ? arts.filter(a=>a.tags.includes(tagFilter)) : arts;
   const allTags = [...new Set(arts.flatMap(a=>a.tags))];
+  const counts = ORDER.map(k=>[k, arts.filter(a=>a.section===k).length]).filter(x=>x[1]);
+  const groups = ORDER.map(k=>[k, shown.filter(a=>a.section===k)]).filter(x=>x[1].length);
+  let n=0;
   app.innerHTML = `
   <header class="mast">
     <div class="brand"><span class="name">UI 设计简报</span><span class="claim">给 UI 设计师的每日快扫 · 30 秒看完今天</span></div>
@@ -130,18 +173,34 @@ function render(){
     <div class="chips" aria-label="按标签筛选">${allTags.map(t=>`<button class="chip" data-tag="${esc(t)}" aria-pressed="${t===tagFilter}">${esc(t)}</button>`).join("")}${tagFilter?`<button class="chip" data-tag="" style="background:none;color:var(--muted)">清除筛选 ×</button>`:""}</div>
     <button id="openAll">${openAll?"全部收起":"全部展开"}</button>
   </div>
-  <ol class="list">${shown.length?shown.map((a,i)=>item(a,i)).join(""):`<li class="empty">本期没有带「${esc(tagFilter)}」标签的内容</li>`}</ol>
-  <footer class="foot"><p>AI 分析与建议属于推论，请结合原文与实际项目判断。</p><a href="#top">返回顶部 ↑</a></footer>`;
+  <div class="cols">
+    <div>
+      ${groups.length?groups.map(([k,list])=>`<section class="group" id="g-${k}">
+        <div class="ghead"><h2>${SECTIONS[k]}</h2><span>${list.length} 篇</span></div>
+        <ol class="list">${list.map(a=>item(a,n++)).join("")}</ol>
+      </section>`).join(""):`<p class="empty">本期没有带「${esc(tagFilter)}」标签的内容</p>`}
+      <section class="about">${ABOUT.map(([h,p])=>`<div><h4>${h}</h4><p>${p}</p></div>`).join("")}</section>
+    </div>
+    <aside class="side">
+      <div><h3>本期导读</h3><p class="note">${esc(NOTES[issue.date]||"")}</p></div>
+      <div><h3>栏目</h3><div class="toc">${counts.map(([k,c])=>`<a href="#g-${k}">${SECTIONS[k]}<b>${String(c).padStart(2,"0")}</b></a>`).join("")}</div></div>
+      <div class="stat"><div><b>${issue.articles.length}</b><small>本期篇数</small></div><div><b>${allTags.length}</b><small>涉及标签</small></div></div>
+      <div><h3>往期</h3><div class="past">${DATA.map((iss,i)=>i===issueIdx?"":`<a href="#" data-issue="${i}"><time>${dot(iss.date)}</time><span>${iss.articles.map(a=>esc(a.title)).join(" / ")}</span></a>`).join("")}</div></div>
+    </aside>
+  </div>
+  <footer class="foot"><p>AI 分析与建议属于推论,请结合原文与实际项目判断。</p><a href="#top">返回顶部 ↑</a></footer>`;
   wire();
 }
 function item(a,i){
   const url = a.source_url;
   return `<li class="item" id="it${i}" ${openAll?"open":""}>
     <div class="row">
-      <span class="sec">${SECTIONS[a.section]}</span>
+      <span class="sec">${String(i+1).padStart(2,"0")}</span>
       <div class="main">
         <h2 class="title"><button class="tbtn" aria-expanded="${openAll}" aria-controls="d${i}">${esc(a.title)}</button></h2>
         <p class="lede">${esc(a.summary)}</p>
+        <p class="imp"><b>影响</b>${esc(a.impact)}</p>
+        <div class="rowtags">${a.tags.map(t=>`<button data-tag="${esc(t)}">${esc(t)}</button>`).join("")}</div>
       </div>
       <div class="aside">
         ${url?`<a href="${esc(url)}" target="_blank" rel="noopener">${esc(a.source)} ↗</a>`:`<span>${esc(a.source)}</span>`}
@@ -186,7 +245,8 @@ function wire(){
   if(next) next.onclick=()=>{issueIdx--;tagFilter=null;render()};
   document.getElementById("toHist").onclick=()=>{view="history";render();window.scrollTo(0,0)};
   document.getElementById("openAll").onclick=()=>{openAll=!openAll;render()};
-  app.querySelectorAll(".chip[data-tag]").forEach(c=>c.onclick=()=>{tagFilter=c.dataset.tag||null;render()});
+  app.querySelectorAll(".chip[data-tag],.rowtags [data-tag]").forEach(c=>c.onclick=()=>{tagFilter=c.dataset.tag||null;render()});
+  app.querySelectorAll(".past [data-issue]").forEach(el=>el.onclick=e=>{e.preventDefault();issueIdx=+el.dataset.issue;tagFilter=null;render();window.scrollTo(0,0)});
   app.querySelectorAll(".item").forEach(li=>{
     const btn=li.querySelector(".tbtn");
     const flip=()=>{const o=!li.hasAttribute("open");li.toggleAttribute("open",o);btn.setAttribute("aria-expanded",o)};
