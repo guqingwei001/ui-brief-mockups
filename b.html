@@ -56,6 +56,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .sect-head h2{margin:0;font-size:14px;font-weight:700;letter-spacing:1.5px;color:var(--muted)}
 .sect-head span{font-size:12px;color:var(--muted)}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.grid.n3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid.n3 .card h3{font-size:19px}
 .card{position:relative;background:var(--panel);border-radius:14px;padding:22px 24px 20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;min-width:0;text-align:left;transition:transform .15s ease}
 .card:hover{transform:translateY(-2px)}
 .card::before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:4px;border-radius:0 4px 4px 0;background:var(--c)}
@@ -98,7 +100,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   .hero-art{min-height:190px}
   .hero-text{padding:24px 22px}
   .hero h1{font-size:25px}
-  .grid{grid-template-columns:1fr}
+  .grid,.grid.n3{grid-template-columns:1fr}
   .dbody{grid-template-columns:1fr}
   .dhead{padding:28px 22px}
   .dhead h1{font-size:26px}
@@ -170,7 +172,7 @@ function renderMain(){
       <div class="hero-text"><span class="kicker">今日头条 · ${SECTIONS[lead.section]}</span><h1>${esc(lead.title)}</h1><p>${esc(lead.summary)}</p><button class="btn" data-art="${lead.i}">阅读 AI 分析 →</button></div>
     </section>`:""}
     <div class="sect-head"><h2>${state.q?`搜索「${esc(state.q)}」`:state.tab==="all"?"今日其余内容":SECTIONS[state.tab]}</h2><span>${dot(issue.date)} · ${list.length} 篇</span></div>
-    <div class="grid">${rest.length?rest.map(card).join(""):`<div class="empty">${state.q?"没有匹配的内容，换个词试试":"本期该栏目暂无内容"}</div>`}</div>
+    <div class="grid${rest.length===3?" n3":""}">${rest.length?rest.map(card).join(""):`<div class="empty">${state.q?"没有匹配的内容，换个词试试":"本期该栏目暂无内容"}</div>`}</div>
     <footer class="foot"><p>AI 分析与建议属于推论，请结合原文与实际项目判断。</p><span>${state.issue<DATA.length-1?`<a href="#" id="older">上一期 ${dot(DATA[state.issue+1].date)} ←</a>`:""} ${state.issue>0?` <a href="#" id="newer">→ 下一期 ${dot(DATA[state.issue-1].date)}</a>`:""}</span></footer>`;
   app.querySelectorAll("[data-art]").forEach(el=>el.onclick=()=>{state.art=+el.dataset.art;state.view="article";render();window.scrollTo(0,0)});
   const older=app.querySelector("#older"), newer=app.querySelector("#newer");
