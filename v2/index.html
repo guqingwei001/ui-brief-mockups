@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="UI 设计简报 v2 可点击原型：无边框、双列快扫、通栏展开。演示数据，未审核。">
+<title>UI 设计简报 · v2 原型</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body id="top">
+<a class="skip" href="#content">跳到内容</a>
+<header class="wrap top">
+  <a class="brand" href="./">UI 设计简报</a>
+  <nav class="nav" aria-label="主导航"><a id="nav-latest" href="./">最新</a><a id="nav-history" href="?view=history">历史</a></nav>
+</header>
+<main id="content" class="wrap" aria-busy="true">
+  <div class="skel" aria-hidden="true"><p>正在读取本期…</p><div></div><div></div><div></div></div>
+  <noscript><p>需要启用 JavaScript 才能阅读简报。</p></noscript>
+</main>
+<p class="sr" role="status" aria-live="polite" id="live"></p>
+<script src="app.js"></script>
+</body>
+</html>

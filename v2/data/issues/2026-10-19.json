@@ -1,0 +1,111 @@
+{
+  "schema_version": "ui-brief-v2-proposal",
+  "issue_id": "demo-2026-10-19",
+  "issue_date": "2026-10-19",
+  "status": "demo",
+  "title": "UI 设计简报",
+  "intro": "精选设计资讯与实用知识，用 AI 提炼要点、分析工作影响，并给出实践建议。",
+  "note": "旧结构迁移样例：四条均为较短版本，用于和 10.20 期的完整试排比较密度。",
+  "articles": [
+    {
+      "id": "web-platform-september",
+      "title": "深浅模式图片切换，获得更广泛支持",
+      "takeaway": "深浅模式可切换图片；新版下拉菜单仍需检查兼容性。",
+      "summary": "web.dev 的九月平台更新介绍：随着 Safari 27 加入支持，light-dark() 已能在主流浏览器中按深浅主题切换图片或渐变。Safari 也开始支持可定制的原生下拉菜单，但原文未列出 Firefox 支持，落地时仍需区分功能与浏览器范围。",
+      "key_points": [],
+      "constraints": [],
+      "impact": "主题适配可覆盖图片与渐变。下拉菜单的视觉方案仍需预留兼容路径，不能把新版本支持等同于所有用户都可用。",
+      "advice": "选一个包含插图和表单的页面，与开发一起列出目标浏览器，再分别确认主题素材及下拉菜单的降级表现。",
+      "tags": [
+        "界面适配",
+        "浏览器更新",
+        "设计交付"
+      ],
+      "source": {
+        "name": "web.dev",
+        "url": "https://web.dev/blog/web-platform-09-2026",
+        "original_title": "New to the web platform in September",
+        "date": "2026-10-02",
+        "date_kind": "published"
+      },
+      "analysis_status": "needs_review",
+      "review_status": "not_reviewed",
+      "migration_note": "由旧结构 summary/impact/advice 直接映射；key_points 与 constraints 为空，不从 summary 拆句伪造。"
+    },
+    {
+      "id": "pure-ui-states",
+      "title": "审查 AI 界面，要看不同状态组合",
+      "takeaway": "角色、套餐与付款状态，会改变同一页面应展示的操作。",
+      "summary": "Matt Rothenberg 用一个示例说明：AI 在管理员账户中检查通过的删除按钮，可能错误地出现在只读用户界面。作者把角色、套餐、付款状态与功能开关作为明确输入，并排展示多种组合，帮助发现单一截图未覆盖的问题；这不能替代对真实流程的测试。",
+      "key_points": [],
+      "constraints": [],
+      "impact": "设计交付需要说明操作在什么条件下出现。只确认默认页面，可能遗漏权限差异与异常状态。",
+      "advice": "从一个关键页面开始，列出角色与业务状态，挑出高风险组合，补充对应界面后再与开发核对。",
+      "tags": [
+        "交互状态",
+        "AI 协作",
+        "设计交付"
+      ],
+      "source": {
+        "name": "Matt Rothenberg",
+        "url": "https://mattrothenberg.com/notes/pure-ui-agentic-era/",
+        "original_title": "Pure UI in the Agentic Era",
+        "date": "2026-10-05",
+        "date_kind": "published"
+      },
+      "analysis_status": "needs_review",
+      "review_status": "not_reviewed",
+      "migration_note": "由旧结构 summary/impact/advice 直接映射；key_points 与 constraints 为空，不从 summary 拆句伪造。"
+    },
+    {
+      "id": "form-error-feedback",
+      "title": "表单报错，还要告诉用户怎么改",
+      "takeaway": "提示应说明错误与修正方法，并能定位到问题字段。",
+      "summary": "W3C 的表单教程建议：提交后明确反馈成功或失败；出现多项错误时，可在表单前集中列出问题，并提供跳转到对应字段的链接。字段附近的提示应使用易懂的描述和修正指引。输入过程中是否立即报错，需要结合字段格式与使用情境判断。",
+      "key_points": [],
+      "constraints": [],
+      "impact": "清楚的错误反馈能帮助用户继续完成任务。设计师需要同时考虑整体提示与字段提示，而不只是红色描边。",
+      "advice": "检查一个现有表单：报错是否指出哪个字段、哪里有问题、如何修正，以及键盘能否定位到对应输入框。",
+      "tags": [
+        "表单设计",
+        "无障碍",
+        "交互反馈"
+      ],
+      "source": {
+        "name": "W3C WAI",
+        "url": "https://www.w3.org/WAI/tutorials/forms/notifications/",
+        "original_title": "User Notification — Forms Tutorial",
+        "date": "2022-06-03",
+        "date_kind": "updated"
+      },
+      "analysis_status": "needs_review",
+      "review_status": "not_reviewed",
+      "migration_note": "由旧结构 summary/impact/advice 直接映射；key_points 与 constraints 为空，不从 summary 拆句伪造。"
+    },
+    {
+      "id": "interfere-system",
+      "title": "Interfere：把视觉规范做成可查的系统",
+      "takeaway": "从颜色、字体到按钮状态，观察一套产品规范如何组织。",
+      "summary": "Interfere 的设计系统将颜色、圆角、阴影、字体与基础组件分组呈现。按钮文档展示层级、尺寸、图标、等待及禁用状态；标题文档列出字号与字重选项。它提供了观察规范组织方式的具体案例，实际使用效果仍需结合产品情境判断。",
+      "key_points": [],
+      "constraints": [],
+      "impact": "规范同时说明视觉选择与组件状态，更便于团队查找和沟通。案例中的样式不一定适合自己的品牌。",
+      "advice": "选一个项目中的按钮，对照这个案例补齐尺寸、层级和状态说明，再检查命名能否让团队快速找到它。",
+      "tags": [
+        "设计系统",
+        "组件规范",
+        "作品赏析"
+      ],
+      "source": {
+        "name": "Interfere",
+        "url": "https://design.interfere.com/",
+        "original_title": "Interfere Design System",
+        "date": null,
+        "date_kind": "unknown"
+      },
+      "analysis_status": "needs_review",
+      "review_status": "not_reviewed",
+      "migration_note": "由旧结构 summary/impact/advice 直接映射；key_points 与 constraints 为空，不从 summary 拆句伪造。"
+    }
+  ]
+}

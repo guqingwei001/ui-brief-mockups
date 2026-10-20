@@ -1,0 +1,10 @@
+{
+  "schema_version": "ui-brief-v2-proposal",
+  "issue_id": "demo-2026-10-17",
+  "issue_date": "2026-10-17",
+  "status": "demo",
+  "title": "UI 设计简报",
+  "intro": "精选设计资讯与实用知识，用 AI 提炼要点、分析工作影响，并给出实践建议。",
+  "note": "空期样例：当天没有通过筛选的候选，不以低分文章补位。",
+  "articles": []
+}

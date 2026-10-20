@@ -1,0 +1,116 @@
+{
+  "schema_version": "ui-brief-v2-proposal",
+  "issue_id": "demo-2026-10-20",
+  "issue_date": "2026-10-20",
+  "status": "demo",
+  "title": "UI 设计简报",
+  "intro": "精选设计资讯与实用知识，用 AI 提炼要点、分析工作影响，并给出实践建议。",
+  "articles": [
+    {
+      "id": "web-platform-september",
+      "title": "深浅模式图片切换，获得更广泛支持",
+      "takeaway": "Safari 27 新增支持随深浅主题切换图片与渐变，也能更灵活地调整原生下拉菜单外观。两项能力的浏览器支持范围不同，需要分别判断能否用于项目。",
+      "summary": "web.dev 的 9 月平台更新汇总中，有两项与界面交付直接相关的变化。Safari 27 新增主题图片切换和可定制原生下拉菜单支持，但它们的兼容范围不同。",
+      "key_points": [
+        "主题图片：light-dark() 从切换颜色扩展到切换图片和渐变，随当前深浅配色方案选用对应素材；原文将这项能力列为主流浏览器新近共同支持。",
+        "下拉菜单：Safari 加入 Chrome，允许更灵活地设置原生选择框及选项外观。原文支持表没有列出 Firefox 支持，不能据此假设所有浏览器都能呈现同样效果。"
+      ],
+      "constraints": [
+        "这里讨论的是两项功能的支持范围；实际项目还需考虑用户使用的浏览器版本。"
+      ],
+      "impact": "对于维护深浅主题和表单组件的设计师，这意味着交付时可以更明确地约定图片如何切换、下拉菜单如何呈现。支持增加并不意味着现有组件必须立即重做；如果项目仍服务旧版浏览器，默认素材与基础控件的表现仍是需要交付的状态。",
+      "advice": "先选一个含插图和下拉菜单的页面，与开发确认目标浏览器及最低版本。为深浅模式分别标明素材，并写清不支持新能力时使用哪张图、哪种菜单。再在这些环境中检查图片辨识度、文字可读性和选项操作，通过后再考虑推广到其他页面。",
+      "tags": [
+        "界面适配",
+        "浏览器更新",
+        "设计交付"
+      ],
+      "source": {
+        "name": "web.dev",
+        "url": "https://web.dev/blog/web-platform-09-2026",
+        "original_title": "New to the web platform in September",
+        "date": "2026-10-02",
+        "date_kind": "updated"
+      },
+      "analysis_status": "needs_review",
+      "review_status": "not_reviewed"
+    },
+    {
+      "id": "pure-ui-states",
+      "title": "审查 AI 界面，要看不同状态组合",
+      "takeaway": "角色、套餐与付款状态，会改变同一页面应展示的操作。",
+      "summary": "作者通过角色、套餐、付款状态等输入，展示同一页面的不同界面状态，指出单一账号验收可能遗漏的问题。",
+      "key_points": [],
+      "constraints": [],
+      "impact": "涉及多角色的页面，需要在交付中说明操作出现的条件。只检查默认状态容易遗漏权限差异。",
+      "advice": "选一个有删除操作的页面，对照管理者与只读用户，补充操作的显示条件，再与开发确认权限规则。",
+      "tags": [
+        "交互状态",
+        "AI 协作",
+        "设计交付"
+      ],
+      "source": {
+        "name": "Matt Rothenberg",
+        "url": "https://mattrothenberg.com/notes/pure-ui-agentic-era/",
+        "original_title": "Pure UI in the Agentic Era",
+        "date": "2026-10-05",
+        "date_kind": "published"
+      },
+      "analysis_status": "needs_review",
+      "review_status": "not_reviewed"
+    },
+    {
+      "id": "form-error-feedback",
+      "title": "表单报错，还要告诉用户怎么改",
+      "takeaway": "W3C 表单教程建议，报错时说明哪个字段出错、怎样修正，并帮助用户定位输入框。提示何时出现同样重要：输入中的即时校验并不适合所有字段。",
+      "summary": "W3C 的这篇教程讨论表单提交后的反馈，以及字段附近的提示。它强调让用户明确知道操作是否成功；发生错误时，还要能理解问题并继续修正。",
+      "key_points": [
+        "说明与定位：页面顶部可汇总错误，每条写明对应字段、问题及修正方法，并提供跳转到输入位置的链接；字段附近也可显示具体说明。",
+        "出现时机：反馈可以在提交后、输入中或离开字段时出现。教程举例，查询用户名是否可用适合即时反馈；日期尚未输入完整时反复报错，则可能打断填写。"
+      ],
+      "constraints": [
+        "这些是反馈设计的可选做法，需要结合字段和任务选择，不能把所有提示都设成实时出现。"
+      ],
+      "impact": "对设计师来说，错误态需要同时说明提示文案、出现位置和触发时机。若只交付红色边框，开发仍要自行决定用户下一步如何修正。在较长表单里，整体汇总帮助发现遗漏，字段说明帮助就地修改；两者应围绕同一问题保持一致。",
+      "advice": "选一张正在做的表单，模拟必填项为空和格式错误同时发生。检查提示能否让用户说清“哪里错、怎么改”，从汇总跳转后是否能定位字段。再逐项确认提示在输入中、离开字段还是提交后出现，重点观察日期等需要完整输入的字段是否过早报错。",
+      "tags": [
+        "表单设计",
+        "无障碍",
+        "交互反馈"
+      ],
+      "source": {
+        "name": "W3C WAI",
+        "url": "https://www.w3.org/WAI/tutorials/forms/notifications/",
+        "original_title": "User Notification — Forms Tutorial",
+        "date": "2022-06-03",
+        "date_kind": "updated"
+      },
+      "analysis_status": "needs_review",
+      "review_status": "not_reviewed"
+    },
+    {
+      "id": "interfere-system",
+      "title": "Interfere：把视觉规范做成可查的系统",
+      "takeaway": "从颜色、字体到按钮状态，观察一套产品规范如何组织。",
+      "summary": "Interfere 将颜色、字体和基础组件分组展示，并记录按钮的层级、尺寸、等待及禁用状态。",
+      "key_points": [],
+      "constraints": [],
+      "impact": "清楚记录样式与状态，有助于团队查找规范和沟通；案例中的视觉样式仍需结合品牌判断。",
+      "advice": "选一个项目中的按钮，检查尺寸、层级和状态说明是否完整，并确认团队能否根据命名找到它。",
+      "tags": [
+        "设计系统",
+        "组件规范",
+        "作品赏析"
+      ],
+      "source": {
+        "name": "Interfere",
+        "url": "https://design.interfere.com/",
+        "original_title": "Interfere Design System",
+        "date": null,
+        "date_kind": "unknown"
+      },
+      "analysis_status": "needs_review",
+      "review_status": "not_reviewed"
+    }
+  ]
+}

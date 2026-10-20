@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UI 设计简报 · v2 方案说明</title>
+<style>
+:root{--ink:#141414;--body:#2b2b2b;--muted:#6a6a6a;--line:#e4e4e4;--soft:#f6f6f6}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--ink);font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;font-size:15px;line-height:1.75}
+.wrap{max-width:900px;margin:0 auto;padding:28px max(20px,env(safe-area-inset-left,0px)) 80px}
+h1{font-size:24px;margin:0 0 4px}
+.sub{color:var(--muted);font-size:14px;margin:0 0 30px}
+h2{font-size:19px;margin:44px 0 12px;padding-top:18px;border-top:1px solid var(--ink)}
+h3{font-size:15.5px;margin:24px 0 8px}
+p,li{color:var(--body)}
+ul,ol{padding-left:1.3em}
+li+li{margin-top:4px}
+table{border-collapse:collapse;width:100%;font-size:14px;margin:12px 0}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{font-weight:600;color:var(--muted);font-size:13px}
+td code,p code,li code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;background:var(--soft);padding:1px 5px;border-radius:3px}
+pre{background:var(--soft);padding:14px 16px;overflow:auto;font-size:13px;line-height:1.6;border-radius:4px}
+.toc{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px;margin-bottom:8px}
+.toc a{color:var(--muted);text-decoration:underline;text-underline-offset:4px}
+a{color:inherit}
+.k{font-weight:600}
+.warn{border-left:2px solid var(--ink);padding-left:12px;color:var(--body)}
+@media (max-width:600px){table{display:block;overflow-x:auto}}
+</style>
+</head>
+<body><div class="wrap">
+<h1>UI 设计简报 · v2 方案说明</h1>
+<p class="sub">2026-10-20 · 独立分析 + 可点击原型 + 后端改造清单。原型：<a href="./">index.html</a>（演示数据，未审核，不连接任何服务）。</p>
+<nav class="toc"><a href="#a">A 判断</a><a href="#b">B 原型</a><a href="#c">C 内容样例</a><a href="#d">D 后端改造</a><a href="#e">E 验证方法</a><a href="#f">F 不同意见</a></nav>
+
+<h2 id="a">A · 简明判断</h2>
+<h3>值得保留的</h3>
+<ul>
+<li><span class="k">两层结构本身是对的。</span>第一层只给来源、标题、takeaway、标签，第二层才给要点和解读。它直接对应产品定位里的价值链：先判断值不值得看，再决定读多深。</li>
+<li><span class="k">"原文要点"和"AI 解读"分栏标注</span>是这个站区别于普通聚合站的地方，也是最容易被质疑的地方。把事实和推论在版面上分开，比在页脚写一句免责声明诚实得多。</li>
+<li><span class="k">来源域名在标题上方、原文链接独立</span>：域名本身就是可信度信号（w3.org 和一个个人博客的分量不同），放在标题前让读者先看来源再看标题，符合设计师的阅读习惯。</li>
+<li><span class="k">数据约定里 date_kind / analysis_status / 允许 null</span>：这几个字段把"不知道"做成了合法状态，页面不用编。旧前端 core.js 的 safeURL、转义、加载失败与历史路由思路也都沿用了。</li>
+</ul>
+<h3>阅读与交互风险，以及我做的小调整</h3>
+<table>
+<tr><th style="width:34%">风险</th><th>调整（已在原型中实现）</th></tr>
+<tr><td>标题和"展开"按钮都能展开，域名也是可点的；三种可点元素挨在一起，读者分不清哪个会离开站点。</td><td>域名链接带 ↗ 且字号最小；标题与"展开"按钮都是站内动作，aria-label 写明"打开原文（新标签页）"。原文链接只出现在域名和详情区底部"阅读原文 ↗"两处，不再出现在标题上。</td></tr>
+<tr><td>展开后详情插到行下方，被选条目在左列时，右列那条会把详情"推远"，读者可能不知道详情属于谁。</td><td>重复标题 + 被选条目标题加下划线 + 按钮文案变"收起"，三处同时标记归属。展开后焦点移到详情标题（tabindex=-1），屏幕阅读器用户也知道去哪了。</td></tr>
+<tr><td>takeaway 长短差异大（第 2、4 条一句话，第 1、3 条三句），双列高度不齐。</td><td>这是故意保留的密度对照。原型里 takeaway 限制 46ch 行宽，短的不拉伸；但正式内容规则应要求 takeaway 至少说清"对象 + 变化 + 限制"，一句话版本达不到就标 needs_review。</td></tr>
+<tr><td>标签筛选后，被展开的文章可能被过滤掉，详情悬空。</td><td>筛选时关闭详情（决策文档已要求），并用 aria-live 播报"只看 X，共 N 条"。清除筛选有独立按钮。</td></tr>
+<tr><td>主题标签太多时筛选行会占两三行，首屏被挤。</td><td>4 条就有 12 个标签。建议正式版每篇最多 3 个标签、全期去重后 ≤ 8 个；超出的放进"更多"。原型未做折叠，因为先要看真实期次的标签分布。</td></tr>
+<tr><td>"本期日期"和"原文日期"容易混。</td><td>标题区只写"本期 2026.10.20"；文章日期只在详情底部出现，并带 date_kind："原文更新 2022.06.03"。未知就写"原文日期未知"，不补。</td></tr>
+<tr><td>展开区左右分栏：左边要点通常比右边长，右边下半空着。</td><td>我保留了左右分栏（见 F 节的依据），但把两栏改成 1:1，并把每栏正文限制在 50ch 行宽，窄屏（≤720px）叠成上下。</td></tr>
+</table>
+<h3>介绍语备选</h3>
+<p>已确认：「精选设计资讯与实用知识，用 AI 提炼要点、分析工作影响，并给出实践建议。」</p>
+<p>备选：「每天几条值得 UI/UX 设计师看的内容：原文要点、对工作的影响、可以动手的建议。」取舍：备选把"给谁看"和"每天"放进去了，读者 3 秒内知道频率和对象；但少了"AI"两个字。如果把 AI 解读当作要验证的差异点，就保留已确认版本；如果担心"AI"让人先入为主地怀疑可信度，用备选。原型用的是已确认版本。</p>
+
+<h2 id="b">B · 可点击原型怎么看</h2>
+<ul>
+<li><a href="./">首页</a>：双列、顺序固定、点标题或"展开要点与 AI 解读"展开；一次一条；Esc 收起；收起后焦点回到触发按钮。</li>
+<li><a href="./?view=history">历史</a>：三期演示（10.20 完整试排 / 10.19 旧结构迁移的短版本 / 10.17 空期）。点某期沿用首页结构，带上一期/下一期和返回入口。</li>
+<li>状态：<a href="./?demo=slow">加载中</a>（骨架占位 2 秒）、<a href="./?demo=empty">空期</a>、<a href="./?demo=error">读取失败</a>（带重新加载）。另有日期格式错误、期次不存在、目录与期次不一致三种校验失败态。</li>
+<li>手机：窗口缩到 720px 以下看，单列，详情紧跟被选条目，按钮高度 ≥44px。</li>
+<li>键盘：Tab 顺序为 域名 → 标题 → 展开按钮；详情内 标题 → 收起 → 原文链接。所有可点元素都有 focus-visible 外框。</li>
+<li>文件：<code>v2/index.html</code>、<code>app.js</code>（校验 + 渲染 + 控制器）、<code>styles.css</code>、<code>data/catalog.json</code>、<code>data/issues/*.json</code>。本地看需要静态服务（<code>python3 -m http.server</code>），直接双击读不到 JSON，页面会提示。</li>
+</ul>
+
+<h2 id="c">C · 内容样例与事实边界</h2>
+<p>四条全部来自 <code>samples/proposed-issue.json</code>，一字未改。第 1 条（web.dev 九月平台更新）和第 3 条（W3C 表单通知教程）是完整试排；第 2、4 条保留短版本作密度对照。我没有新增任何事实，也没有重新核对 web.dev 与 W3C 原文，所以四条的 <code>analysis_status</code> 都保持 <code>needs_review</code>、<code>review_status</code> 为 <code>not_reviewed</code>，页面上标"样例 · 未审核"。</p>
+<table>
+<tr><th>页面区域</th><th>来源</th><th>页面怎么标</th></tr>
+<tr><td>标题、takeaway、summary、key_points、constraints</td><td>依据原文整理（样例由人工写成）</td><td>"原文要点 · 来自来源，按原文陈述"</td></tr>
+<tr><td>impact、advice</td><td>AI 推论（样例由人工按规则写成）</td><td>"AI 解读 · 推论，带适用条件"；详情底部再标一次审核状态</td></tr>
+<tr><td>来源名、URL、原文标题、日期、date_kind</td><td>程序从元数据填入，模型不碰</td><td>域名 + "原文更新 2026.10.02"</td></tr>
+</table>
+<p class="warn">样例里第 1 条写"Safari 27"、第 3 条引用 W3C 教程的即时校验例子，这些都是样例作者的陈述。正式发布前需要有人打开原文逐条核对 evidence_notes；这一步不能省，也不能由另一轮 AI 代替。</p>
+
+<h2 id="d">D · 后端改造方案</h2>
+<h3>从代码核实的现状</h3>
+<ul>
+<li><code>bot.py</code> 只调 <code>core/analyzer.py</code>：随机抽样候选，只把标题/来源/链接给模型，temperature 0.85，输出四栏目 Markdown 表格，推飞书后把"给模型看过的"链接全部写进 used.txt。这条线没有正文、没有事实约束、没有审核。</li>
+<li><code>extractor.py → article_analyzer.py → content_rules.py → refilter_saved.py → build_brief_draft.py</code> 是另一条离线线：有正文、有 JSON、有筛选，但字段是 summary / why_it_matters / category / scores，不是页面要的 takeaway / key_points / constraints / impact / advice。两条线没有交汇点，<code>bot.py</code> 从未 import 过新模块。</li>
+<li>版本疑点照 BACKEND_FACTS：<code>validate_sources.py</code> 有重复的顶层定义，门槛规则（相关度 ≥7 还是加权分 ≥7）在三个脚本里不一致。改造先冻结这些试验脚本，不在它们上面继续加功能。</li>
+</ul>
+<h3>目标主线</h3>
+<pre>维护者 RSS 列表
+  → collector  采集 + 去重 + 日期/站点元信息
+  → extractor  正文 + 质量标记（web/rss、字数、是否截断）
+  → content_rules.check_content  不足就止步，标 insufficient_source
+  → article_analyzer_v2  单篇 JSON（新 Prompt，见 backend/article_prompt_v2.txt）
+  → validate_analysis_v2 + 内部评分（排序用，不公开）
+  → build_issue_draft  写 data/drafts/&lt;date&gt;.internal.json（含正文片段、证据、评分）
+  → 人工核对（改 review_status=reviewed，可删条、可改字）
+  → publish_issue  生成 data/issues/&lt;date&gt;.json（公开投影）+ 更新 catalog.json + 写 used.txt
+  → 同一份公开 JSON：网页直接读；deliver_feishu 用 render_feishu_text() 压缩后发送，投递状态单独记录</pre>
+<h3>逐文件</h3>
+<table>
+<tr><th style="width:22%">文件</th><th>改什么</th><th style="width:26%">可复用</th></tr>
+<tr><td><code>bot.py</code></td><td>保留为旧线入口不动。新建 <code>run_daily_v2.py</code>：采集→提取→分析→草稿，到草稿为止自动，发布和投递是两条独立命令。失败一篇不中断整期。</td><td>整体编排和错误处理的写法</td></tr>
+<tr><td><code>core/collector.py</code></td><td>输出补 <code>published</code>/<code>updated</code>（来自 feedparser 的 published_parsed/updated_parsed，转 ISO 日期）、<code>site_name</code>（feed.feed.title）、<code>author</code>；<code>clean_rss_summary</code> 真正去 HTML（直接复用 content_rules.TextParser）。</td><td>并发抓取、两级去重</td></tr>
+<tr><td><code>core/extractor.py</code></td><td>RSS fallback 同样过 <code>check_content</code>；记录 <code>content_quality = {source, chars, truncated}</code>；用 trafilatura 的 metadata 再拿一次页面日期，与 RSS 日期不一致时标 needs_review。MIN 300 字只是门槛，不代表可信。</td><td>下载、提取、长度控制、统一返回结构</td></tr>
+<tr><td><code>core/article_analyzer.py</code></td><td>Prompt 换成 v2；<code>validate_analysis</code> 按新字段：status 枚举、null 规则（ready 必须有 impact/advice 和 ≥1 要点）、标签 2～5 去重、空话黑名单、evidence_notes 的 quote 必须在正文里能找到（子串检查）。scores 挪到单独的 <code>score_article()</code>，只做内部排序。</td><td>call_deepseek、parse_ai_json、validate_text_field、validate_score、错误分类</td></tr>
+<tr><td><code>core/content_rules.py</code></td><td>RULE_VERSION 升 v2；<code>classify_record</code> 增加：content_source=rss 最高只能到 needs_review；截断正文不得 ready。</td><td>check_content、三档分类</td></tr>
+<tr><td><code>build_brief_draft.py</code></td><td>改名 <code>build_issue_draft.py</code>：输出新结构；去掉 category 配额；<code>--limit 4</code> 保留为上限不是目标；内部字段放 <code>internal</code> 子对象，公开投影函数 <code>public_view(draft)</code> 单独写，保证正文、评分、路径不会漏出去。</td><td>valid_link、read_used、去重、排序、写文件不覆盖</td></tr>
+<tr><td>新 <code>publish_issue.py</code></td><td>读草稿，要求每条 review_status=reviewed；写公开 JSON（status=published, version=n）、更新 catalog、追加 used.txt。按 issue_id 幂等：重复发布只升 version，不重复写 used。</td><td>—</td></tr>
+<tr><td><code>core/delivery.py</code></td><td>输入改为公开期次 JSON，不再接收自由文本；<code>render_feishu_text()</code> 见 <code>backend/validate_issue.py</code>。投递结果写 <code>data/delivery/&lt;issue_id&gt;.json</code>（时间、重试次数、返回码），与发布状态分开；重试不会再发布。</td><td>Webhook 调用、配置检查</td></tr>
+<tr><td><code>core/storage.py</code></td><td>used.txt 只当去重索引；新增 <code>load_catalog / save_issue / save_internal</code>。历史来自 data/issues，不是 used.txt。</td><td>目录创建、读写</td></tr>
+<tr><td><code>refilter_saved.py</code> <code>recheck_scores.py</code> <code>validate_sources.py</code></td><td>冻结。validate_sources 不要运行（重复 main）。等 v2 线跑通后用新字段重写一个 <code>recheck</code>。</td><td>按链接取最近版本的思路</td></tr>
+<tr><td>前端 <code>core.js</code> / <code>app.js</code></td><td>用本原型的 <code>app.js</code> 替换：去掉 section 枚举、catalog.sections、四栏目文案与重排；校验改为 DATA_CONTRACT。</td><td>safeURL、esc、validDate、href、超时 fetch、失败重试</td></tr>
+</table>
+<h3>旧字段 → 新字段</h3>
+<table>
+<tr><th>旧</th><th>新</th><th>规则</th></tr>
+<tr><td>article.link</td><td>source.url</td><td>程序校验后原样写入，模型不改写</td></tr>
+<tr><td>article.source_feed</td><td>（内部）</td><td>公开 source.name 用站点真实名称，无则用域名</td></tr>
+<tr><td>article.published / updated（新增）</td><td>source.date + date_kind</td><td>两者都有取 updated；都没有 → null + unknown</td></tr>
+<tr><td>analysis.summary</td><td>summary（过渡）</td><td>可直接显示；<b>不</b>拆句生成 key_points，留空列表</td></tr>
+<tr><td>analysis.why_it_matters</td><td>impact（过渡）</td><td>整段放 impact，advice 为 null，标 needs_review，等重新分析</td></tr>
+<tr><td>analysis.category</td><td>（内部）</td><td>可作内部筛选辅助；不进公开 JSON，不强制成标签</td></tr>
+<tr><td>analysis.tags</td><td>tags</td><td>去空白、去重、统一大小写；最多 5</td></tr>
+<tr><td>analysis.scores / reason</td><td>internal.selection</td><td>排序与审核用，不公开</td></tr>
+<tr><td>draft.source.feed / provenance</td><td>删</td><td>不输出本地路径和报告地址</td></tr>
+<tr><td>status=draft / requires_review</td><td>status + review_status</td><td>draft 只在 internal 文件；公开只有 demo/published</td></tr>
+</table>
+<h3>新版单篇 Prompt 与校验</h3>
+<p>Prompt 全文：<a href="backend/article_prompt_v2.txt">backend/article_prompt_v2.txt</a>。与交接包草案相比的改动：把"先判断资料够不够"放在第一步并给出三档的具体触发条件；takeaway 规定必须含"对象 + 变化 + 限制"三件事；evidence_notes 改成 claim/quote 对，quote 限 40 字以内，程序能做子串校验；空话黑名单写进规则；明确 content_source=rss 的上限。</p>
+<p>程序校验（<a href="backend/validate_issue.py">backend/validate_issue.py</a>，标准库，已在三份演示期次上跑通）：</p>
+<ol>
+<li>结构：schema_version、issue_id、issue_date、status ∈ {demo, published}，articles 为数组（可空），id 唯一且合法。</li>
+<li>文章：title/takeaway/summary 非空；key_points/constraints 为字符串列表；impact/advice 为文本或 null；tags 1～5 且不重复。</li>
+<li>来源：name/url/original_title 非空，url 仅 http(s) 且无凭证；date_kind=unknown 时 date 必须为 null。</li>
+<li>状态一致性：ready 必须有 impact、advice 和 ≥1 条要点，且 review_status=reviewed；published 期次不能含未审核文章。</li>
+<li>内容：takeaway 不能等于标题；impact/advice 不含空话黑名单。</li>
+<li>隐私：公开文件不得含 content、scores、reason、evidence_notes、excluded、provenance 等内部字段。</li>
+</ol>
+<p>公开 JSON Schema：<a href="backend/issue_schema.json">backend/issue_schema.json</a>。</p>
+<h3>网页与飞书消费同一份数据</h3>
+<p>发布后只有一份 <code>data/issues/&lt;date&gt;.json</code>。网页读它；飞书由 <code>render_feishu_text(issue)</code> 从它渲染：每条取标题、takeaway、一句 impact、标签、原文链接、站内锚点（<code>?date=…#a-&lt;id&gt;</code>）。只做压缩，不再让模型生成第二份文案。文章集合、顺序、article_id、期次 version 两边一致；飞书文本长度限制在实现前要核实，超长时按"去掉 impact → 去掉标签"的顺序裁，而不是重写。</p>
+
+<h2 id="e">E · 验证方法</h2>
+<h3>真实用户任务（5～6 位 UI/UX 设计师，各 15 分钟，边做边说）</h3>
+<ol>
+<li>打开首页，30 秒内指出"今天哪一条你会点开"，并说为什么。记录：选了哪条、用了多久、依据是标题/takeaway/域名/标签中的哪个。</li>
+<li>展开第 1 条，用自己的话说"这条在什么条件下才和我有关"。记录：能否说出"浏览器支持范围不同"这层限制；是否读到了 constraints。</li>
+<li>从展开的详情去看原文。记录：点的是域名、"阅读原文"还是标题；有没有误把标题当外链。</li>
+<li>找到昨天那一期，再回到最新。记录：路径与步数；是否注意到期次日期和文章日期的区别。</li>
+<li>只看"设计交付"主题，再回到全部。记录：是否发现筛选后详情关闭；是否找到清除按钮。</li>
+<li>收起详情后，问"刚才那条的建议是什么"。记录：第二层内容是否留下了可复述的动作。</li>
+</ol>
+<h3>作品集可记录的指标（只记录测得的，不写百分比预期）</h3>
+<ul>
+<li>任务 1 的首次展开用时和选择依据分布；任务 2 中说出适用条件的人数。</li>
+<li>外链误触次数（想展开却离开了站点）；任务 3 用的入口分布。</li>
+<li>每个任务的完成/未完成与卡住的位置（截图 + 一句引语）。</li>
+<li>内容侧：每期 ready / needs_review / insufficient_source 的比例；人工审核改动了多少字段；从草稿到发布的时间；链接可用率（发布前 HEAD 检查）。</li>
+<li>技术侧：首屏 DOMContentLoaded、JSON 大小、键盘遍历一遍的 Tab 次数、axe 之类工具的无障碍问题数。</li>
+</ul>
+
+<h2 id="f">F · 对既定约束的不同意见（主方案仍按已确认方向）</h2>
+<ul>
+<li><span class="k">展开区左右分栏 vs 上下分段。</span>我建议保留左右，但两栏等宽。依据：两栏的语义不同（事实 / 推论），并排时读者一眼就能看出"这是两种东西"，上下堆叠则容易读成一篇连续文章，事实与推论的边界反而模糊。代价是左右高度不齐，右栏下方留白；在 50ch 行宽下，样例第 3 条左栏约 14 行、右栏约 11 行，差距可接受。超过 ~25 行的长要点再考虑上下。窄屏已叠成上下。</li>
+<li><span class="k">"一次只展开一条"</span>对快扫是对的，但做比较时（两条都讲表单）会来回点。第一版保持一条；若用户测试里出现"想同时看两条"的行为，再考虑允许两条。</li>
+<li><span class="k">标签全部可筛</span>在 4 条/期的规模下意义不大（筛完常常只剩一条）。它的价值在历史页跨期筛选，而那被划到第一版之外了。建议第一版标签照显示，但观察任务 5 的使用情况再决定要不要保留筛选控件。</li>
+<li><span class="k">intro 里的"AI"</span>见 A 节备选。</li>
+</ul>
+<p class="sub" style="margin-top:40px">本页与原型均为离线演示：没有连接生产服务、没有调用模型、没有发送飞书、没有索要或包含任何密钥。</p>
+</div></body></html>
